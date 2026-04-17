@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Risk Details - {{ customer.name }}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .back-btn {
+            display: inline-block;
+            background: white;
+            color: #667eea;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        
+        .back-btn:hover {
+            background: #f0f0f0;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        
+        .header h1 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        .risk-score-card {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .risk-score-card h2 {
+            font-size: 4em;
+            margin: 20px 0;
+        }
+        
+        .risk-score-card .category {
+            font-size: 1.5em;
+            margin: 10px 0;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .info-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .info-label {
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+        
+        .info-value {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .factors-section {
+            margin: 30px 0;
+        }
+        
+        .factors-section h3 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        
+        .factor {
+            margin-bottom: 20px;
+        }
+        
+        .factor-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .factor-bar {
+            height: 40px;
+            background: #e0e0e0;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+        
+        .factor-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 15px;
+            color: white;
+            font-weight: bold;
+            transition: width 0.3s;
+        }
+        
+        .recommendation-box {
+            background: #d4edda;
+            border-left: 5px solid #28a745;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .recommendation-box h4 {
+            color: #155724;
+            margin-bottom: 10px;
+        }
+        
+        .formula-box {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+        
+        .formula-box h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .interest-rate {
+            font-size: 1.2em;
+            color: #28a745;
+            font-weight: bold;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-btn">← Back to Dashboard</a>
+        
+        <div class="card">
+            <div class="header">
+                <h1>Risk Analysis Report</h1>
+                <p>Detailed risk assessment for {{ customer.name }}</p>
+            </div>
+            
+            <div class="risk-score-card">
+                <p>Final Risk Score</p>
+                <h2>{{ customer.risk_score }} / 100</h2>
+                <div class="category">{{ customer.risk_category }}</div>
+                <p>Recommended Interest Rate: <span class="interest-rate">{{ customer.interest_rate }}</span></p>
+            </div>
+            
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-label">Customer ID</div>
+                    <div class="info-value">{{ customer.id }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Full Name</div>
+                    <div class="info-value">{{ customer.name }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Credit Score</div>
+                    <div class="info-value">{{ customer.credit_score }} / 850</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Payment History</div>
+                    <div class="info-value">{{ customer.payment_history|title }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Debt-to-Income Ratio</div>
+                    <div class="info-value">{{ customer.debt_to_income }}%</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Employment Years</div>
+                    <div class="info-value">{{ customer.employment_years }} years</div>
+                </div>
+            </div>
+            
+            <div class="factors-section">
+                <h3>Risk Factor Contributions</h3>
+                
+                <div class="factor">
+                    <div class="factor-header">
+                        <span><strong>Credit Score</strong> (Weight: 40%)</span>
+                        <span>{{ customer.credit_score }} points → {{ ((850 - customer.credit_score) / 550 * 40) | round(1) }} points</span>
+                    </div>
+                    <div class="factor-bar">
+                        <div class="factor-fill" style="width: {{ ((850 - customer.credit_score) / 550 * 40) }}%">
+                            {{ ((850 - customer.credit_score) / 550 * 40) | round(1) }} / 40
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="factor">
+                    <div class="factor-header">
+                        <span><strong>Payment History</strong> (Weight: 30%)</span>
+                        <span>{{ customer.payment_history|title }} → 
+                        {% if customer.payment_history == 'excellent' %}10
+                        {% elif customer.payment_history == 'good' %}30
+                        {% elif customer.payment_history == 'fair' %}60
+                        {% else %}90
+                        {% endif %} points → 
+                        {% if customer.payment_history == 'excellent' %}{{ (10 * 0.3) | round(1) }}
+                        {% elif customer.payment_history == 'good' %}{{ (30 * 0.3) | round(1) }}
+                        {% elif customer.payment_history == 'fair' %}{{ (60 * 0.3) | round(1) }}
+                        {% else %}{{ (90 * 0.3) | round(1) }}
+                        {% endif %} points</span>
+                    </div>
+                    <div class="factor-bar">
+                        <div class="factor-fill" style="width: 
+                            {% if customer.payment_history == 'excellent' %}10
+                            {% elif customer.payment_history == 'good' %}30
+                            {% elif customer.payment_history == 'fair' %}60
+                            {% else %}90
+                            {% endif %}%">
+                            {% if customer.payment_history == 'excellent' %}{{ (10 * 0.3) | round(1) }}
+                            {% elif customer.payment_history == 'good' %}{{ (30 * 0.3) | round(1) }}
+                            {% elif customer.payment_history == 'fair' %}{{ (60 * 0.3) | round(1) }}
+                            {% else %}{{ (90 * 0.3) | round(1) }}
+                            {% endif %} / 30
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="factor">
+                    <div class="factor-header">
+                        <span><strong>Debt-to-Income Ratio</strong> (Weight: 20%)</span>
+                        <span>{{ customer.debt_to_income }}% → {{ (customer.debt_to_income / 60 * 20) | round(1) }} points</span>
+                    </div>
+                    <div class="factor-bar">
+                        <div class="factor-fill" style="width: {{ (customer.debt_to_income / 60 * 20) }}%">
+                            {{ (customer.debt_to_income / 60 * 20) | round(1) }} / 20
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="factor">
+                    <div class="factor-header">
+                        <span><strong>Employment Years</strong> (Weight: 10%)</span>
+                        <span>{{ customer.employment_years }} years → {{ ((20 - customer.employment_years) / 20 * 10) | round(1) }} points</span>
+                    </div>
+                    <div class="factor-bar">
+                        <div class="factor-fill" style="width: {{ ((20 - customer.employment_years) / 20 * 10) }}%">
+                            {{ ((20 - customer.employment_years) / 20 * 10) | round(1) }} / 10
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="recommendation-box">
+                <h4>💡 Recommendation</h4>
+                <p>
+                    {% if customer.risk_category == 'Low Risk' %}
+                    This customer is an excellent candidate for a loan. Approve with favorable terms and lowest interest rate.
+                    {% elif customer.risk_category == 'Medium Risk' %}
+                    This customer has moderate risk. Approve with standard interest rate and regular monitoring.
+                    {% else %}
+                    This customer has high risk. Requires additional verification, collateral, or higher interest rate.
+                    {% endif %}
+                </p>
+                <p style="margin-top: 10px;">
+                    <strong>Suggested Action:</strong> 
+                    {% if customer.risk_category == 'Low Risk' %}
+                    Approve loan immediately
+                    {% elif customer.risk_category == 'Medium Risk' %}
+                    Approve with conditions
+                    {% else %}
+                    Review and verify documents
+                    {% endif %}
+                </p>
+            </div>
+            
+            <div class="formula-box">
+                <h4>📊 Risk Calculation Formula</h4>
+                <p><strong>Formula:</strong> Risk Score = (Credit Score × 40%) + (Payment History × 30%) + (DTI × 20%) + (Employment × 10%)</p>
+                <p><strong>Calculation for {{ customer.name }}:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>Credit: (850 - {{ customer.credit_score }}) / 550 × 40 = {{ ((850 - customer.credit_score) / 550 * 40) | round(1) }}</li>
+                    <li>Payment: 
+                        {% if customer.payment_history == 'excellent' %}10 × 0.3 = {{ (10 * 0.3) | round(1) }}
+                        {% elif customer.payment_history == 'good' %}30 × 0.3 = {{ (30 * 0.3) | round(1) }}
+                        {% elif customer.payment_history == 'fair' %}60 × 0.3 = {{ (60 * 0.3) | round(1) }}
+                        {% else %}90 × 0.3 = {{ (90 * 0.3) | round(1) }}
+                        {% endif %}
+                    </li>
+                    <li>DTI: {{ customer.debt_to_income }} / 60 × 20 = {{ (customer.debt_to_income / 60 * 20) | round(1) }}</li>
+                    <li>Employment: (20 - {{ customer.employment_years }}) / 20 × 10 = {{ ((20 - customer.employment_years) / 20 * 10) | round(1) }}</li>
+                    <li><strong>Total Risk Score = {{ customer.risk_score }}</strong></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>© 2024 Finance Risk Calculator | Powered by Weighted Score Algorithm</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finance Risk Calculator | Risk Profiling System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        /* Header */
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .header h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+        
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-card h3 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .stat-card p {
+            color: #666;
+            font-size: 1em;
+        }
+        
+        .stat-low h3 { color: #28a745; }
+        .stat-medium h3 { color: #ffc107; }
+        .stat-high h3 { color: #dc3545; }
+        .stat-avg h3 { color: #667eea; }
+        
+        /* Risk Lists */
+        .risk-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .risk-box {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .risk-box h3 {
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        .risk-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            margin: 5px 0;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .risk-item:hover {
+            background: #e9ecef;
+        }
+        
+        .risk-score {
+            font-weight: bold;
+        }
+        
+        /* Table */
+        .table-container {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            overflow-x: auto;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .table-container h3 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th {
+            background: #667eea;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+        }
+        
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        tr:hover {
+            background: #f5f5f5;
+        }
+        
+        .risk-low {
+            color: #28a745;
+            font-weight: bold;
+        }
+        
+        .risk-medium {
+            color: #ffc107;
+            font-weight: bold;
+        }
+        
+        .risk-high {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        
+        .view-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 12px;
+        }
+        
+        .view-btn:hover {
+            background: #764ba2;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: white;
+            padding: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .risk-section {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🏦 Finance Risk Calculator</h1>
+            <p>Data-Driven Risk Profiling System | Weighted Score Algorithm (40% | 30% | 20% | 10%)</p>
+        </div>
+        
+        <!-- Statistics Cards -->
+        <div class="stats-grid">
+            <div class="stat-card stat-low">
+                <h3>{{ low_risk }}</h3>
+                <p>Low Risk Customers</p>
+                <small>Best candidates for loans</small>
+            </div>
+            <div class="stat-card stat-medium">
+                <h3>{{ medium_risk }}</h3>
+                <p>Medium Risk Customers</p>
+                <small>Standard interest rates</small>
+            </div>
+            <div class="stat-card stat-high">
+                <h3>{{ high_risk }}</h3>
+                <p>High Risk Customers</p>
+                <small>Need verification</small>
+            </div>
+            <div class="stat-card stat-avg">
+                <h3>{{ avg_score }}</h3>
+                <p>Average Risk Score</p>
+                <small>Out of 100</small>
+            </div>
+        </div>
+        
+        <!-- Top Risk Lists -->
+        <div class="risk-section">
+            <div class="risk-box">
+                <h3>🔴 Highest Risk Customers (Need Attention)</h3>
+                {% for customer in highest_risk %}
+                <div class="risk-item">
+                    <span><strong>{{ customer.name }}</strong> (ID: {{ customer.id }})</span>
+                    <span class="risk-score" style="color: #dc3545;">Score: {{ customer.risk_score }}</span>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="risk-box">
+                <h3>🟢 Lowest Risk Customers (Best Candidates)</h3>
+                {% for customer in lowest_risk %}
+                <div class="risk-item">
+                    <span><strong>{{ customer.name }}</strong> (ID: {{ customer.id }})</span>
+                    <span class="risk-score" style="color: #28a745;">Score: {{ customer.risk_score }}</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <!-- Customer Table -->
+        <div class="table-container">
+            <h3>📊 All Customers Risk Analysis (50 Customers)</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Credit Score</th>
+                        <th>Payment History</th>
+                        <th>DTI Ratio</th>
+                        <th>Employment</th>
+                        <th>Risk Score</th>
+                        <th>Category</th>
+                        <th>Interest Rate</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for customer in customers %}
+                    <tr>
+                        <td>{{ customer.id }}</td>
+                        <td>{{ customer.name }}</td>
+                        <td>{{ customer.credit_score }}</td>
+                        <td>{{ customer.payment_history|title }}</td>
+                        <td>{{ customer.debt_to_income }}%</td>
+                        <td>{{ customer.employment_years }} yrs</td>
+                        <td><strong>{{ customer.risk_score }}</strong></td>
+                        <td class="{% if customer.risk_category == 'Low Risk' %}risk-low{% elif customer.risk_category == 'Medium Risk' %}risk-medium{% else %}risk-high{% endif %}">
+                            {{ customer.risk_category }}
+                        </td>
+                        <td>{{ customer.interest_rate }}</td>
+                        <td><a href="/customer/{{ customer.id }}" class="view-btn">View Details</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="footer">
+            <p>Risk Score Formula: (Credit Score × 40%) + (Payment History × 30%) + (DTI × 20%) + (Employment × 10%)</p>
+            <p>© 2024 Finance Risk Calculator | Data-Driven Risk Profiling System</p>
+        </div>
+    </div>
+</body>
+</html>
